@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/create.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js"></script>
+    <title>Create Your Painting</title>
+</head>
+<body>
+    <div id="background" alt="background">
+
+    <main>
+        <header>
+            <h1 class="title cartoon">Create Your Painting</h1>
+        </header>
+    
+        <div id="content">
+    
+            <canvas id="canvas" width="800" height="600"></canvas>
+    
+            <div id="actions">
+                <div id="colorRelated">
+                    <div id="colors"></div>
+                    <input type="text" id="picker" data-coloris>
+                </div>
+                <div id="tools">
+                    <div id="brushs"></div>
+                    <div id="size"></div>
+                </div>
+            </div>
+    
+        </div>
+    </main>
+</body>
+
+<script src="js/create/canvas.js"></script>
+<script src="js/create/controls.js"></script>
+</html>

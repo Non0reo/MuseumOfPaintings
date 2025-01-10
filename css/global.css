@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Jacquard+12&family=Tiny5&display=swap');
+
+:root {
+    --shadowOffset: 20px;
+}
+
+* {
+    font-family: "Tiny5", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    background-color: black;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+}
+
+.cartoon {
+    display: flex;
+    width: fit-content;
+    background-color: white;
+    border: 10px solid black;
+    box-shadow: var(--shadowOffset) var(--shadowOffset) 0px black;
+    border-radius: 45px;
+    padding: 15px 40px;
+}

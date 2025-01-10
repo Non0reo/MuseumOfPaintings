@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 11 11" fill="currentColor">
+<defs/>
+    <!-- Diagonal line between point 10,1 tp 1,10 using polygon -->
+    <polygon points="10,1 10,2 9,2 9,3 8,3 8,4 7,4 7,5 6,5 6,6 5,6 5,7 4,7 4,8 3,8 3,9 2,9 2,10 1,10 1,9 2,9 2,8 3,8 3,7 4,7 4,6 5,6 5,5 6,5 6,4 7,4 7,3 8,3 8,2 9,2 9,1 10,1"/>
+
+</svg>

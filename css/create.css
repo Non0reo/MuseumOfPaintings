@@ -1,0 +1,50 @@
+
+
+div#background {
+    background-image: url('../assets/backgrounds/wall.avif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+
+    /* filter: blur(2px); */
+}
+
+
+
+main {
+    text-align: center;
+}
+
+canvas {
+    border: 30px groove rgb(201, 155, 91);
+    aspect-ratio: 4/3;
+    width: 50%;
+}
+
+.title {
+    border: 10px solid rgb(255, 182, 47);
+}
+
+
+
+#colors {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#tools {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.action {
+    width: 25px;
+    height: 25px;
+}
