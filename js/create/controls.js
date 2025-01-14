@@ -30,8 +30,15 @@ function addColors() {
 
         div.addEventListener('click', () => {
             changeColor(color);
+            const selected = document.querySelector('.color.selected');
+            if (selected) selected.classList.remove('selected');
+            div.classList.add('selected');
         });
     });
+
+    //give the first color a selected class
+
+    colors.children[0].classList.add('selected');
 }
 
 addColors();
@@ -44,17 +51,15 @@ Coloris({
     closeButton: true,
     format: 'hex',
     wrap: false,
+    focusInput: false,
+    closeLabel: 'Select',
     onChange: function(color) {
         changeColor(color);
+        const selected = document.querySelector('.color.selected');
+        if (selected) selected.classList.remove('selected');
+        document.getElementById('picker').classList.add('selected');
     }
 });
-
-document.getElementById('picker').addEventListener('change', function() {
-    changeColor(this.value);
-});
-
-
-
 
 
 function addTool(name, path, action, parent) {
@@ -70,11 +75,22 @@ function addTool(name, path, action, parent) {
     div.addEventListener('click', action);
 }
 
-addTool('Draw', 'assets/icons/edit.svg', () => {}, tools);
-addTool('Erase', 'assets/icons/erase.svg', () => {}, tools);
+addTool('Draw', 'assets/icons/edit.svg', () => {
+    mode = 'draw';
+}, tools);
+
+addTool('Erase', 'assets/icons/erase.svg', () => {
+    mode = 'erase';
+    ctx.imageSmoothingEnabled = true,
+    ctx.fillStyle = 'white';
+    console.log('erase');
+}, tools);
 addTool('Fill', 'assets/icons/fill.svg', () => {}, tools);
 addTool('Rect', 'assets/icons/rect.svg', () => {}, tools);
 addTool('Circle', 'assets/icons/circle.svg', () => {}, tools);
 addTool('Line', 'assets/icons/line.svg', () => {}, tools);
 addTool('Rect Fill', 'assets/icons/rectfill.svg', () => {}, tools);
 addTool('Circle Fill', 'assets/icons/circlefill.svg', () => {}, tools);
+addTool('Save', 'assets/icons/save.svg', saveCanvasAsImage, tools);
+addTool('Download', 'assets/icons/download.svg', () => {}, tools);
+addTool('Clear', 'assets/icons/clear.svg', clearCanvas, tools);

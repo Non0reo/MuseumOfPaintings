@@ -9,6 +9,7 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 
 canvas.addEventListener('mousedown', function(event) {
+    if (event.button !== 0) return;
     mousePressed = true;
 });
 
@@ -16,24 +17,38 @@ window.addEventListener('mouseup', function() {
     mousePressed = false;
 });
 
-
 canvas.addEventListener('mousemove', function(event) {
+    let mousePos = getMousePosOnCanvas(event);
+
     if (!mousePressed) {
         savedPoint = null;
         return;
     }
 
-    //draw a line from the saved point to the current point
     if (savedPoint) {
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
         ctx.beginPath();
         ctx.moveTo(savedPoint.x, savedPoint.y);
-        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.lineTo(mousePos.x, mousePos.y);
         ctx.stroke();
-        savedPoint = { x: event.offsetX, y: event.offsetY };
-    } else {
-        savedPoint = { x: event.offsetX, y: event.offsetY };
+        savedPoint = mousePos
+    }
+    else {
+        savedPoint = mousePos;
+        changeWidth(2)
     }
 });
+
+
+function getMousePosOnCanvas(event) {
+    let rect = canvas.getBoundingClientRect();
+    return {
+        x: (event.clientX - rect.left - 30 ) / canvas.clientWidth * canvas.width,
+        y: (event.clientY - rect.top - 30 ) / canvas.clientHeight * canvas.height
+    };
+}
+
 
 function getPixelColor(x, y, data) {
     const index = (y * canvas.width + x) * 4;
@@ -51,6 +66,16 @@ function saveCanvasAsImage() {
     link.href = image;
     link.download = 'canvas-image.png';
     link.click();
+}
+
+function copyImageToClipboard() {
+    canvas.toBlob(blob => {
+        navigator.clipboard.write([
+            new ClipboardItem({
+                'image/png': blob
+            })
+        ]);
+    });
 }
 
 function clearCanvas() {
@@ -94,4 +119,9 @@ function fillBucket(color, clickPos) {
     }
 
     ctx.putImageData(imgData, 0, 0);
+}
+
+function toBase64() {
+    const dataURL = canvas.toDataURL();
+    console.log(dataURL);
 }
