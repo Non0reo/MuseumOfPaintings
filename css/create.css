@@ -1,7 +1,7 @@
 
 
 div#background {
-    background-image: url('../assets/backgrounds/wall.avif');
+    background-image: url('../assets/backgrounds/wall_pixel.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -22,6 +22,8 @@ main {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    overflow-y: auto;
+    height: 100%;
 }
 
 canvas {
@@ -38,6 +40,9 @@ div#content {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    background-color: rgba(191, 167, 141, 0.7);
+    padding: 30px;
+    border-radius: 10px;
 }
 
 #actions {
@@ -72,7 +77,7 @@ div#content {
     gap: 30px;
 }
 
-#tools {
+#tools, #size {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 5px;
@@ -86,4 +91,34 @@ div#content {
 
 .selected {
     outline: 5px solid rgb(255, 255, 255);
+}
+
+
+@media screen and (max-width: 800px) {
+    canvas {
+        border: 20px groove rgb(201, 155, 91);
+    }
+
+    #content {
+        /* margin: 20px; */
+        width: calc(100% - 100px);
+    }
+
+    #actions {
+        flex-direction: column;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #colorRelated, #toolRelated {
+        align-items: center;
+    }
+
+    #colors, #tools, #size {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
 }

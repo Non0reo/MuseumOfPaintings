@@ -1,6 +1,9 @@
+import * as environment from './modes/environment.js';
+import * as render from './modes/render.js';
+import { ctx } from './canvas.js';
+
 const colors = document.getElementById('colors');
 const tools = document.getElementById('tools');
-const brushs = document.getElementById('brushs');
 const sizes = document.getElementById('sizes');
 
 const coreColors = [
@@ -16,7 +19,6 @@ const distantColors = [
 
 let colorList = [...new Set([...coreColors, ...distantColors])];
 
-
 let mode = 'draw'; // draw, erase, fill, rect, circle, line, rectfill, circlefill
 
 function addColors() {
@@ -29,7 +31,7 @@ function addColors() {
         colors.appendChild(div);
 
         div.addEventListener('click', () => {
-            changeColor(color);
+            ctx.strokeStyle = color;
             const selected = document.querySelector('.color.selected');
             if (selected) selected.classList.remove('selected');
             div.classList.add('selected');
@@ -44,17 +46,17 @@ function addColors() {
 addColors();
 
 Coloris({
-    el: '#picker',
-    themeMode: 'dark',
-    alpha: false,
-    defaultColor: '#000000',
-    closeButton: true,
-    format: 'hex',
-    wrap: false,
-    focusInput: false,
-    closeLabel: 'Select',
+    // el: '#picker',
+    // themeMode: 'dark',
+    // alpha: false,
+    // defaultColor: '#000000',
+    // closeButton: true,
+    // format: 'hex',
+    // wrap: false,
+    // focusInput: false,
+    // closeLabel: 'Select',
     onChange: function(color) {
-        changeColor(color);
+        ctx.strokeStyle = color;
         const selected = document.querySelector('.color.selected');
         if (selected) selected.classList.remove('selected');
         document.getElementById('picker').classList.add('selected');
@@ -62,35 +64,57 @@ Coloris({
 });
 
 
-function addTool(name, path, action, parent) {
+function addTool(name, parent, action, isPermanentAction = true) {
     const div = document.createElement('div');
     const icon = document.createElement('img');
+    const pathName = name.replace(/\s+/g, '').toLowerCase();
+    console.log(pathName);
     div.classList.add('tool');
     div.classList.add('action');
-    icon.src = path;
+    icon.src = `assets/icons/${pathName}.svg`;
     icon.alt = name;
     div.appendChild(icon);
     parent.appendChild(div);
 
-    div.addEventListener('click', action);
+    div.addEventListener('click', () => {
+        if(isPermanentAction) {
+            const selected = document.querySelector('.tool.selected');
+            if (selected) selected.classList.remove('selected');
+            div.classList.add('selected');
+            mode = pathName;
+        }
+        if(action) action()
+    });
 }
 
-addTool('Draw', 'assets/icons/edit.svg', () => {
-    mode = 'draw';
-}, tools);
+const toolActions = {
+    'Draw': null,
+    'Erase': null,
+    'Fill': null,
+    'Rect': null,
+    'Circle': null,
+    'Line': null,
+    'Rect Fill': null,
+    'Circle Fill': null,
+    'Save': environment.saveCanvasAsImage,
+    'Download': () => {},
+    'Clear': environment.clearCanvas
+};
 
-addTool('Erase', 'assets/icons/erase.svg', () => {
-    mode = 'erase';
-    ctx.imageSmoothingEnabled = true,
-    ctx.fillStyle = 'white';
-    console.log('erase');
-}, tools);
-addTool('Fill', 'assets/icons/fill.svg', () => {}, tools);
-addTool('Rect', 'assets/icons/rect.svg', () => {}, tools);
-addTool('Circle', 'assets/icons/circle.svg', () => {}, tools);
-addTool('Line', 'assets/icons/line.svg', () => {}, tools);
-addTool('Rect Fill', 'assets/icons/rectfill.svg', () => {}, tools);
-addTool('Circle Fill', 'assets/icons/circlefill.svg', () => {}, tools);
-addTool('Save', 'assets/icons/save.svg', saveCanvasAsImage, tools);
-addTool('Download', 'assets/icons/download.svg', () => {}, tools);
-addTool('Clear', 'assets/icons/clear.svg', clearCanvas, tools);
+Object.entries(toolActions).forEach(([name, action]) => {
+    addTool(name, tools, action, action === null);
+});
+
+const sizeActions = {
+    'Small': () => changeWidth(1),
+    'Medium': () => changeWidth(5),
+    'Large': () => changeWidth(10),
+    'Extra Large': () => changeWidth(20)
+};
+
+Object.entries(sizeActions).forEach(([name, action]) => {
+    addTool(name, size, action);
+});
+
+
+export { mode };
