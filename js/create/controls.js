@@ -20,6 +20,7 @@ const distantColors = [
 let colorList = [...new Set([...coreColors, ...distantColors])];
 
 let mode = 'draw'; // draw, erase, fill, rect, circle, line, rectfill, circlefill
+let actualColor = 'black';
 
 function addColors() {
     
@@ -31,14 +32,9 @@ function addColors() {
         colors.appendChild(div);
 
         div.addEventListener('click', () => {
-            ctx.strokeStyle = color;
-            const selected = document.querySelector('.color.selected');
-            if (selected) selected.classList.remove('selected');
-            div.classList.add('selected');
+            setSelectedColor(color, div);
         });
     });
-
-    //give the first color a selected class
 
     colors.children[0].classList.add('selected');
 }
@@ -56,13 +52,18 @@ Coloris({
     // focusInput: false,
     // closeLabel: 'Select',
     onChange: function(color) {
-        ctx.strokeStyle = color;
-        const selected = document.querySelector('.color.selected');
-        if (selected) selected.classList.remove('selected');
-        document.getElementById('picker').classList.add('selected');
+        setSelectedColor(color, document.getElementById('picker'));
     }
 });
 
+function setSelectedColor(color, element) {
+    actualColor = color;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    const selected = document.querySelector('.color.selected');
+    if (selected) selected.classList.remove('selected');
+    element.classList.add('selected');
+}
 
 function addTool(name, parent, action, isPermanentAction = true) {
     const div = document.createElement('div');
@@ -71,9 +72,10 @@ function addTool(name, parent, action, isPermanentAction = true) {
     console.log(pathName);
     div.classList.add('tool');
     div.classList.add('action');
-    icon.src = `assets/icons/${pathName}.svg`;
+    icon.src = `assets/icons/${parent.id}/${pathName}.svg`;
     icon.alt = name;
     div.appendChild(icon);
+    console.dir(parent);
     parent.appendChild(div);
 
     div.addEventListener('click', () => {
@@ -117,4 +119,4 @@ Object.entries(sizeActions).forEach(([name, action]) => {
 });
 
 
-export { mode };
+export { mode, actualColor };

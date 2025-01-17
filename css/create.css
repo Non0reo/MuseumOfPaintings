@@ -34,6 +34,7 @@ canvas {
 
 .title {
     border: 10px solid rgb(255, 182, 47);
+    text-align: center;
 }
 
 div#content {

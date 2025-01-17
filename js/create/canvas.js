@@ -9,6 +9,7 @@ let mousePressed = false;
 
 ctx.fillStyle = 'white';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.translate(0.5, 0.5);
 
 
 canvas.addEventListener('mousedown', function(event) {
@@ -60,6 +61,7 @@ function getPixelColor(x, y, data) {
 
 function changeColor(color) {
     ctx.strokeStyle = color;
+    ctx.fillStyle = color;
 }
 
 function changeWidth(width) {

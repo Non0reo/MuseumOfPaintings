@@ -1,9 +1,11 @@
 import { ctx, canvas, savedPoint, mousePressed } from "../canvas.js";
+import { actualColor } from "../controls.js";
 
 //let savedPoint = savedPointOut;
 //let mousePressed = false;
 
 function draw(mousePos, callback) {
+    changeColor(actualColor);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.beginPath();
@@ -58,7 +60,9 @@ function fill(mousePos) {
 /* Utils canvas functions */
 
 function changeColor(color) {
+    ctx.imageSmoothingEnabled = false;
     ctx.strokeStyle = color;
+    ctx.fillStyle = color;
 }
 
 function changeWidth(width) {
