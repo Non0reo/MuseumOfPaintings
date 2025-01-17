@@ -103,10 +103,6 @@ const toolActions = {
     'Clear': environment.clearCanvas
 };
 
-Object.entries(toolActions).forEach(([name, action]) => {
-    addTool(name, tools, action, action === null);
-});
-
 const sizeActions = {
     'Small': () => changeWidth(1),
     'Medium': () => changeWidth(5),
@@ -114,9 +110,16 @@ const sizeActions = {
     'Extra Large': () => changeWidth(20)
 };
 
+Object.entries(toolActions).forEach(([name, action]) => {
+    addTool(name, tools, action, action === null);
+});
+
 Object.entries(sizeActions).forEach(([name, action]) => {
     addTool(name, size, action);
 });
+
+tools.children[0].classList.add('selected');
+size.children[0].classList.add('selected');
 
 
 export { mode, actualColor };
