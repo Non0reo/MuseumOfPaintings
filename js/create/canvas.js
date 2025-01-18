@@ -4,25 +4,48 @@ import { mode } from './controls.js';
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-let savedPoint;
+let previousPoint;
+let startPoint;
 let mousePressed = false;
+let savedCanvas = null;
 
 ctx.fillStyle = 'white';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.translate(0.5, 0.5);
 
+
+//phone events
+
+canvas.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    let mousePos = getMousePosOnCanvas(event.touches[0]);
+    previousPoint = mousePos;
+    startPoint = mousePos;
+    eval(`render.${mode}(mousePos);`);
+});
+
+canvas.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+    let mousePos = getMousePosOnCanvas(event.touches[0]);
+    console.log(mousePos, mousePressed);
+
+    if (previousPoint) {
+        eval(`render.${mode}(mousePos, () => previousPoint = mousePos);`);
+    }
+    else previousPoint = mousePos;
+});
+
+
+//computer events
+
 canvas.addEventListener('mousedown', function(event) {
     if (event.button !== 0) return;
     mousePressed = true;
-});
-
-window.addEventListener('mouseup', function() {
-    mousePressed = false;
-});
-
-canvas.addEventListener('click', function(event) {
+    
     let mousePos = getMousePosOnCanvas(event);
-    savedPoint = mousePos;
+    previousPoint = mousePos;
+    startPoint = mousePos;
+    savedCanvas = ctx.getImageData(0, 0, canvas.width, canvas.height);
     eval(`render.${mode}(mousePos);`);
 });
 
@@ -30,15 +53,20 @@ canvas.addEventListener('mousemove', function(event) {
     let mousePos = getMousePosOnCanvas(event);
 
     if (!mousePressed) {
-        savedPoint = null;
+        previousPoint = null;
         return;
     }
 
-    if (savedPoint) {
-        eval(`render.${mode}(mousePos, () => savedPoint = mousePos);`);
+    if (previousPoint) {
+        eval(`render.${mode}(mousePos, () => previousPoint = mousePos);`);
     }
-    else savedPoint = mousePos;
+    else previousPoint = mousePos;
 });
+
+window.addEventListener('mouseup', function() {
+    mousePressed = false;
+});
+
 
 
 function getMousePosOnCanvas(event) {
@@ -57,7 +85,7 @@ function loadCanvasImage(image) {
 
     const img = new Image();
     img.onload = () => {
-        ctx.drawImage(img, 0, 0);
+        ctx.drawImage(img, -1, -1);
     };
     img.src = image;
 }
@@ -66,7 +94,8 @@ function loadCanvasImage(image) {
 export { 
     canvas,
     ctx,
-    savedPoint,
+    previousPoint,
+    startPoint,
     mousePressed,
     loadCanvasImage
 };

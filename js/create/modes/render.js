@@ -1,7 +1,7 @@
-import { ctx, canvas, savedPoint, mousePressed } from "../canvas.js";
+import { ctx, canvas, previousPoint, startPoint, mousePressed } from "../canvas.js";
 import { actualColor } from "../controls.js";
 
-//let savedPoint = savedPointOut;
+//let previousPoint = previousPointOut;
 //let mousePressed = false;
 
 function draw(mousePos, callback) {
@@ -10,7 +10,7 @@ function draw(mousePos, callback) {
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.beginPath();
-    ctx.moveTo(savedPoint.x, savedPoint.y);
+    ctx.moveTo(previousPoint.x, previousPoint.y);
     ctx.lineTo(mousePos.x, mousePos.y);
     ctx.stroke();
     
@@ -26,7 +26,7 @@ function erase(mousePos, callback) {
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.beginPath();
-    ctx.moveTo(savedPoint.x, savedPoint.y);
+    ctx.moveTo(previousPoint.x, previousPoint.y);
     ctx.lineTo(mousePos.x, mousePos.y);
     ctx.stroke();
     
@@ -35,26 +35,12 @@ function erase(mousePos, callback) {
     }
 }
 
-function fill(mousePos) {
-    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-    const targetColor = getPixelColor(mousePos.x, mousePos.y, data);
-    const fillColor = hexToRgb(ctx.strokeStyle);
-    const stack = [mousePos];
-
-    while (stack.length) {
-        const newPos = stack.pop();
-        const currentColor = getPixelColor(newPos.x, newPos.y, data);
-
-        if (currentColor.r === targetColor.r && currentColor.g === targetColor.g && currentColor.b === targetColor.b) {
-            ctx.fillStyle = ctx.strokeStyle;
-            ctx.fillRect(newPos.x, newPos.y, 1, 1);
-
-            stack.push({ x: newPos.x + 1, y: newPos.y });
-            stack.push({ x: newPos.x - 1, y: newPos.y });
-            stack.push({ x: newPos.x, y: newPos.y + 1 });
-            stack.push({ x: newPos.x, y: newPos.y - 1 });
-        }
-    }
+function line(mousePos) {
+    changeColor(actualColor);
+    ctx.beginPath();
+    ctx.moveTo(startPoint.x, startPoint.y);
+    ctx.lineTo(mousePos.x, mousePos.y);
+    ctx.stroke();
 }
 
 
@@ -77,4 +63,9 @@ function toBase64() {
 
 
 
-export { draw, erase, changeWidth };
+export { 
+    draw,
+    erase,
+    line,
+    
+    changeWidth };
