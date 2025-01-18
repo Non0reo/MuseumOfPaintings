@@ -29,6 +29,7 @@ function addColors() {
         div.classList.add('color'); 
         div.classList.add('action');
         div.style.backgroundColor = color;
+        div.title = String(color).charAt(0).toUpperCase() + String(color).slice(1);
         colors.appendChild(div);
 
         div.addEventListener('click', () => {
@@ -70,20 +71,21 @@ function addTool(name, parent, action, isPermanentAction = true) {
     const icon = document.createElement('img');
     const pathName = name.replace(/\s+/g, '').toLowerCase();
     console.log(pathName);
-    div.classList.add('tool');
+    div.classList.add(parent.id);
     div.classList.add('action');
     icon.src = `assets/icons/${parent.id}/${pathName}.svg`;
     icon.alt = name;
+    icon.title = name;
     div.appendChild(icon);
     console.dir(parent);
     parent.appendChild(div);
 
     div.addEventListener('click', () => {
         if(isPermanentAction) {
-            const selected = document.querySelector('.tool.selected');
+            const selected = document.querySelector(`.${parent.id}.selected`);
             if (selected) selected.classList.remove('selected');
             div.classList.add('selected');
-            mode = pathName;
+            if(parent.id !== 'size') mode = pathName;
         }
         if(action) action()
     });
@@ -98,16 +100,16 @@ const toolActions = {
     'Line': null,
     'Rect Fill': null,
     'Circle Fill': null,
-    'Save': environment.saveCanvasAsImage,
-    'Download': () => {},
+    'Save': environment.copyBase64ToClipboard,
+    'Download': environment.saveCanvasAsImage,
     'Clear': environment.clearCanvas
 };
 
 const sizeActions = {
-    'Small': () => changeWidth(1),
-    'Medium': () => changeWidth(5),
-    'Large': () => changeWidth(10),
-    'Extra Large': () => changeWidth(20)
+    'Small': () => render.changeWidth(1),
+    'Medium': () => render.changeWidth(3),
+    'Large': () => render.changeWidth(6),
+    'Extra Large': () => render.changeWidth(10)
 };
 
 Object.entries(toolActions).forEach(([name, action]) => {

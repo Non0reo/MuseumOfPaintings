@@ -23,12 +23,50 @@ header {
     top: 0;
 }
 
+footer {
+    display: flex;
+    justify-content: center;
+    margin: 50px;
+    gap: 30px;
+}
+
 .cartoon {
     display: flex;
     width: fit-content;
     background-color: white;
-    border: 10px solid black;
+    border: 10px solid rgb(58, 106, 218);
     box-shadow: var(--shadowOffset) var(--shadowOffset) 0px black;
     border-radius: 45px;
     padding: 15px 40px;
+    transition: all 0.3s;
+}
+
+button.cartoon p {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+button.cartoon:hover {
+    transition: all 0.3s;
+    transform: translate(var(--shadowOffset), var(--shadowOffset));
+    border: 10px solid rgb(123, 163, 255);
+    box-shadow: 0 0 0px black;
+    cursor: pointer;
+}
+
+button.cartoon:hover p {
+    animation: zoomInOut 1s infinite;
+}
+
+@keyframes zoomInOut {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+    
 }

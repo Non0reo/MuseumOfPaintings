@@ -6,6 +6,7 @@ import { actualColor } from "../controls.js";
 
 function draw(mousePos, callback) {
     changeColor(actualColor);
+    ctx.imageSmoothingEnabled = false
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.beginPath();
@@ -76,4 +77,4 @@ function toBase64() {
 
 
 
-export { draw, erase };
+export { draw, erase, changeWidth };

@@ -11,7 +11,6 @@ ctx.fillStyle = 'white';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.translate(0.5, 0.5);
 
-
 canvas.addEventListener('mousedown', function(event) {
     if (event.button !== 0) return;
     mousePressed = true;
@@ -19,6 +18,12 @@ canvas.addEventListener('mousedown', function(event) {
 
 window.addEventListener('mouseup', function() {
     mousePressed = false;
+});
+
+canvas.addEventListener('click', function(event) {
+    let mousePos = getMousePosOnCanvas(event);
+    savedPoint = mousePos;
+    eval(`render.${mode}(mousePos);`);
 });
 
 canvas.addEventListener('mousemove', function(event) {
@@ -32,9 +37,7 @@ canvas.addEventListener('mousemove', function(event) {
     if (savedPoint) {
         eval(`render.${mode}(mousePos, () => savedPoint = mousePos);`);
     }
-    else {
-        savedPoint = mousePos;
-    }
+    else savedPoint = mousePos;
 });
 
 
@@ -46,31 +49,17 @@ function getMousePosOnCanvas(event) {
     };
 }
 
+//the image is given using Base64 encoding
+function loadCanvasImage(image) {
+    if(!image) {
+        image ??= prompt('Please enter the code of the image');
+    }
 
-function getPixelColor(x, y, data) {
-    const index = (y * canvas.width + x) * 4;
-    return {
-        r: data[index],
-        g: data[index + 1],
-        b: data[index + 2],
-        a: data[index + 3]
+    const img = new Image();
+    img.onload = () => {
+        ctx.drawImage(img, 0, 0);
     };
-}   
-
-
-
-function changeColor(color) {
-    ctx.strokeStyle = color;
-    ctx.fillStyle = color;
-}
-
-function changeWidth(width) {
-    ctx.lineWidth = width;
-}
-
-function toBase64() {
-    const dataURL = canvas.toDataURL();
-    console.log(dataURL);
+    img.src = image;
 }
 
 
@@ -78,5 +67,6 @@ export {
     canvas,
     ctx,
     savedPoint,
-    mousePressed
+    mousePressed,
+    loadCanvasImage
 };
